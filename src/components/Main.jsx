@@ -695,6 +695,23 @@ const Links = ({ language }) => {
   );
 };
 
+/** Button artwork is numbered 1–13 for a fixed section order (includes social-protection). */
+const STAT_CARD_IMAGE_BY_SECTION_ID = {
+  demography: 1,
+  "health-care": 2,
+  education: 3,
+  "social-protection": 4,
+  households: 5,
+  "employment-and-unemployment": 6,
+  income: 7,
+  ict: 8,
+  "business-statistics": 9,
+  agriculture: 10,
+  crime: 11,
+  "influence-and-power": 12,
+  "sport-statistics": 13,
+};
+
 const statCardImagesGe = Object.fromEntries(
   Array.from({ length: 13 }, (_, i) => [
     i + 1,
@@ -712,7 +729,7 @@ const statCardImagesEn = {
 };
 
 const StatCards = ({ language }) => {
-  const [hoveredIndex, setHoveredIndex] = React.useState(null);
+  const [hoveredId, setHoveredId] = React.useState(null);
   const navigate = useNavigate();
   const { sections, loading } = useGenderStatisticsSections();
 
@@ -729,40 +746,56 @@ const StatCards = ({ language }) => {
 
   return (
     <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {sections.map((section, i) => (
-        <div
-          key={section.id}
-          className="flex flex-col items-center justify-center gap-4 rounded-2xl cursor-pointer"
-          onMouseEnter={() => setHoveredIndex(i)}
-          onMouseLeave={() => setHoveredIndex(null)}
-          onClick={() => navigate(`/statistics/${section.id}`)}
-          style={{
-            border:
-              hoveredIndex === i ? "1px solid #0066e0" : "1px solid #e5e7eb",
-            padding: "16px 10px",
-            background: "#fff",
-            transform: hoveredIndex === i ? "scale(1.05)" : "scale(1)",
-            transition: "border-color 0.2s, transform 0.2s, box-shadow 0.2s",
-            boxShadow:
-              hoveredIndex === i ? "0 4px 16px rgba(0,102,224,0.12)" : "none",
-          }}
-        >
-          <img
-            src={
-              language === "EN"
-                ? statCardImagesEn[i + 1]
-                : statCardImagesGe[i + 1]
-            }
-            alt={`Statistics card ${i + 1}`}
+      {sections.map((section) => {
+        const imageIndex = STAT_CARD_IMAGE_BY_SECTION_ID[section.id];
+        const imageSrc =
+          imageIndex != null
+            ? language === "EN"
+              ? statCardImagesEn[imageIndex]
+              : statCardImagesGe[imageIndex]
+            : null;
+        const isHovered = hoveredId === section.id;
+
+        return (
+          <div
+            key={section.id}
+            className="flex flex-col items-center justify-center gap-4 rounded-2xl cursor-pointer"
+            onMouseEnter={() => setHoveredId(section.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => navigate(`/statistics/${section.id}`)}
             style={{
-              width: "100%",
-              maxWidth: "220px",
-              height: "auto",
-              objectFit: "contain",
+              border: isHovered ? "1px solid #0066e0" : "1px solid #e5e7eb",
+              padding: "16px 10px",
+              background: "#fff",
+              transform: isHovered ? "scale(1.05)" : "scale(1)",
+              transition: "border-color 0.2s, transform 0.2s, box-shadow 0.2s",
+              boxShadow: isHovered
+                ? "0 4px 16px rgba(0,102,224,0.12)"
+                : "none",
             }}
-          />
-        </div>
-      ))}
+          >
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={language === "EN" ? section.en : section.ge}
+                style={{
+                  width: "100%",
+                  maxWidth: "220px",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            ) : (
+              <span
+                className="text-sm text-center text-[#009ddc] px-2"
+                style={{ fontFamily: "myFont, sans-serif" }}
+              >
+                {language === "EN" ? section.en : section.ge}
+              </span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
