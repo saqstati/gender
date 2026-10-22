@@ -1,7 +1,10 @@
 export const GENDER_STATISTICS_CATEGORY = "gender-statistics";
 
+/** Same-origin proxy to https://pcaxis-api.geostat.ge (the API sends no CORS headers). */
+const PCAXIS_API_ORIGIN = "/pcaxis-api";
+
 export const GENDER_STATISTICS_API_BASE =
-  "https://pcaxis-api.geostat.ge/api/navigation/categories";
+  `${PCAXIS_API_ORIGIN}/api/navigation/categories`;
 
 export const GENDER_STATISTICS_CATEGORIES_URL = `${GENDER_STATISTICS_API_BASE}?gender-statistics`;
 
@@ -20,7 +23,7 @@ export const buildGenderStatisticsDatasetsUrl = (subcategoryId, language) => {
 };
 
 export const GENDER_STATISTICS_DATASET_API_BASE =
-  "https://pcaxis-api.geostat.ge/api/datasets";
+  `${PCAXIS_API_ORIGIN}/api/datasets`;
 
 /**
  * @param {string} datasetId

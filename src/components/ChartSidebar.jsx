@@ -95,7 +95,7 @@ const ChartSidebar = ({
       </div>
       {pxwebUrl ? (
         <a
-          href={pxwebUrl}
+          href={pxwebUrl.endsWith("/") ? pxwebUrl : `${pxwebUrl}/`}
           target="_blank"
           rel="noreferrer"
           className="statistics-pxweb-btn"

@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/((?!assets/).*)",
+      "source": "/pcaxis-api/:path*",
+      "destination": "https://pcaxis-api.geostat.ge/:path*"
+    },
+    {
+      "source": "/((?!assets/|pcaxis-api/).*)",
       "destination": "/index.html"
     }
   ]

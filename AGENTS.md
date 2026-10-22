@@ -21,7 +21,7 @@ This file provides essential guidance for AI coding agents working in this React
 |--------|------|-----|
 | React app (Vite dev / preview) | **3000** | http://localhost:3000 |
 
-Chart/statistics data is loaded from `https://pcaxis-api.geostat.ge` (no local API server required).
+Chart/statistics data comes from `https://pcaxis-api.geostat.ge`, which sends no CORS headers. The app calls it through the same-origin `/pcaxis-api/*` proxy: Vite `server.proxy`/`preview.proxy` locally, an ARR rewrite in `public/web.config` on IIS, and a rewrite in `vercel.json` on Vercel.
 
 ## Key Conventions
 
